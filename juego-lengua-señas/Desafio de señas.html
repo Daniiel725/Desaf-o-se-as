@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Quest - Doodle Style</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="mobile-frame" id="mobile-frame">
+
+    <!-- BARRA SUPERIOR (HEADER) -->
+    <header class="top-bar hidden" id="game-header">
+      <button class="icon-btn" id="btn-toggle-view">📖</button>
+      <div class="title-container">
+        <h2 id="header-title">ESCENARIO 1</h2>
+        <div id="lives-container" class="lives-display">✦✦✦✦✦</div>
+      </div>
+      <div class="header-right-actions">
+        <!-- MUESTRA FICHAS EN EL HEADER -->
+        <span id="main-tokens-tag" style="font-weight: bold; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;">
+          🪙 <span id="main-tokens">20</span>
+        </span>
+        <button class="user-avatar" id="btn-open-shop">⬡</button>
+        <button class="icon-btn" id="btn-header-settings">⚙</button>
+      </div>
+    </header>
+
+    <!-- PANTALLA 1: MENÚ PRINCIPAL -->
+    <div id="main-menu-view" class="view-screen">
+      <div class="main-menu-content">
+        <div class="menu-buttons-container">
+  <button id="btn-continue" class="main-black-btn hidden" style="margin-bottom: 8px; background: #2e8b57; border-color: #000;">▶ CONTINUAR PARTIDA</button>
+  <button id="btn-play" class="main-black-btn">⚡ PARTIDA NUEVA</button>
+  <button id="btn-options" class="doodle-btn btn-menu-opt">⚙ OPCIONES Y LOGROS</button>
+</div>
+        <span class="sparkle">✦ ✦ ✦</span>
+        <h1 class="game-logo">DESAFIO DE SEÑAS</h1>
+        <p class="game-subtitle">APRENDIZAJE DE LENGUA DE SEÑAS</p>
+        
+        <div class="logo-doodle-card">
+          <span>🖐</span>
+        </div>
+
+        <div class="menu-buttons-container">
+          <button id="btn-play" class="main-black-btn">▶ INICIAR JUEGO</button>
+          <button id="btn-options" class="doodle-btn btn-menu-opt">⚙ OPCIONES Y LOGROS</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 2: OPCIONES Y DIFICULTAD -->
+    <div id="options-view" class="view-screen hidden">
+      <div class="options-content">
+        <h2 class="hero-title">⚙ CONFIGURACIÓN</h2>
+        
+        <div class="options-section">
+          <p class="opt-label">DIFICULTAD:</p>
+          <div class="diff-selector">
+            <button class="diff-btn active" data-diff="easy">FÁCIL</button>
+            <button class="diff-btn" data-diff="normal">NORMAL</button>
+            <button class="diff-btn" data-diff="hard">DIFÍCIL</button>
+          </div>
+        </div>
+
+        <div class="options-section">
+          <div class="toggle-container">
+            <span><strong>⬡ MODO ENSAYO</strong><br><small>Sin tiempo y con botón de solución</small></span>
+            <input type="checkbox" id="toggle-practice">
+          </div>
+        </div>
+
+        <div class="options-section">
+          <p class="opt-label">✦ LOGROS ALCANZADOS:</p>
+          <div id="achievements-list" class="achievements-grid"></div>
+        </div>
+
+        <div class="options-actions">
+          <button id="btn-back-home" class="doodle-btn" style="width:100%; margin-bottom:8px;">🏠 IR AL MENÚ PRINCIPAL</button>
+          <button id="btn-back-game" class="main-black-btn">◀ VOLVER AL JUEGO</button>
+        </div>
+      </div>
+    </div>
+    <!-- MODAL: ELEGIR DIFICULTAD AL EMPEZAR PARTIDA NUEVA -->
+<div id="new-game-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <p class="modal-badge">⚡ NUEVA PARTIDA</p>
+    <h3>Elige la Dificultad:</h3>
+    <div class="diff-selector-vertical" style="display:flex; flex-direction:column; gap:8px; margin:15px 0;">
+      <button class="main-black-btn start-diff-btn" data-diff="easy">FÁCIL (Recuperas vidas rápido)</button>
+      <button class="main-black-btn start-diff-btn" data-diff="normal" style="background:#4682b4;">NORMAL (Equilibrado)</button>
+      <button class="main-black-btn start-diff-btn" data-diff="hard" style="background:#8b0000;">DIFÍCIL (Tiempo veloz y penalización alta)</button>
+    </div>
+    <button id="close-new-game-modal" class="doodle-btn">CANCELAR</button>
+  </div>
+</div>
+
+    <!-- PANTALLA 3: MODO JUEGO PRINCIPAL -->
+    <div id="game-view" class="view-screen hidden">
+      <section class="character-section">
+        <span class="sparkle left">✦</span>
+        <span class="sparkle right">✦</span>
+        
+        <div class="doodle-card">
+          <span id="target-symbol">A</span>
+        </div>
+        
+
+        <!-- INDICADOR DE COMBO / RACHA DE DERROTAS -->
+        <div id="combo-display" class="combo-badge hidden">COMBO x1 🔥</div>
+
+        <h1 id="question-title" class="hero-title">SÍMBOLO A</h1>
+        <p class="hero-sub"><span id="stage-name">ESCENARIO 1</span> (<span id="score-num">0</span> exp)</p>
+      </section>
+
+      <section class="progress-section">
+        <div class="progress-bar-bg">
+          <div id="progress-fill" class="progress-bar-fill"></div>
+        </div>
+        <div class="exp-labels">
+          <span id="exp-current">0 exp</span>
+          <span id="exp-max">1000 exp</span>
+        </div>
+      </section>
+
+      <div id="review-card" class="review-card hidden">
+        <p class="review-tag">⚠ REPASO SUGERIDO:</p>
+        <p id="review-text">Revisa la técnica de esta seña en el diccionario.</p>
+      </div>
+
+      <main class="action-section">
+        <button id="solve-btn" class="doodle-btn btn-solve hidden">🤖 SOLUCIÓN AUTOMÁTICA</button>
+        <div id="options-container" class="options-doodle-grid"></div>
+        <button id="next-btn" class="main-black-btn hidden">✦ CONTINUAR ✦</button>
+      </main>
+    </div>
+
+    <!-- PANTALLA 4: DICCIONARIO -->
+    <div id="learn-view" class="view-screen hidden">
+      <div class="learn-header">
+        <p class="learn-sub">DICCIONARIO DE SEÑAS</p>
+        <div class="tab-selector">
+          <button id="tab-vowels" class="tab-btn active">VOCALES</button>
+          <button id="tab-numbers" class="tab-btn">NÚMEROS</button>
+          <button id="tab-consonants" class="tab-btn">LETRAS (✦)</button>
+        </div>
+      </div>
+
+      <div id="learn-grid" class="learn-grid"></div>
+
+      <div class="learn-detail-card">
+        <div class="detail-symbol" id="detail-symbol">A</div>
+        <div class="detail-info">
+          <h3 id="detail-title">Seña A</h3>
+          <p id="detail-desc">Puño cerrado con el pulgar apoyado a un lado.</p>
+          <p id="detail-motion" class="detail-motion">⤾ Movimiento: Estático</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 5: MINIJUEGO SECUENCIA -->
+    <div id="minigame-view" class="view-screen hidden">
+      <div class="minigame-header">
+        <p class="minigame-tag">⚡ DESAFÍO DE SECUENCIA ⚡</p>
+        <p class="minigame-sub">Racha Minijuego: <strong id="mini-streak">0/3</strong> ✦</p>
+        
+        <div id="sequence-display" class="sequence-display"></div>
+
+        <div class="mini-timer-bg">
+          <div id="mini-timer-fill" class="mini-timer-fill"></div>
+        </div>
+      </div>
+
+      <main class="action-section">
+        <div id="mini-options-container" class="options-doodle-grid"></div>
+        <button id="mini-next-btn" class="main-black-btn hidden">✦ SIGUIENTE DESAFÍO ✦</button>
+      </main>
+    </div>
+
+    <!-- TIENDA DE HABILIDADES (MODAL) -->
+<div id="shop-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <p class="modal-badge">⬡ TIENDA DE HABILIDADES</p>
+    <p class="shop-exp-tag">Fichas Acumuladas: 🪙 <strong id="shop-tokens">20</strong></p>
+    
+    <div class="shop-items-container">
+      <!-- BOTÓN COMPRA DICCIONARIO (ACCESO ÚNICO) -->
+      <div class="shop-item">
+        <div>
+          <strong>📖 Abrir Diccionario (1 uso)</strong>
+          <p>Consulta las señas por esta ocasión.</p>
+        </div>
+        <button id="buy-dict" class="doodle-btn btn-buy">10 🪙</button>
+      </div>
+
+      <div class="shop-item">
+        <div>
+          <strong>✦ Pista Instantánea</strong>
+          <p>Elimina 2 opciones incorrectas.</p>
+        </div>
+        <button id="buy-hint" class="doodle-btn btn-buy">20 🪙</button>
+      </div>
+
+      <div class="shop-item">
+        <div>
+          <strong>✦ Reloj Extra</strong>
+          <p>Añade tiempo adicional en el minijuego.</p>
+        </div>
+        <button id="buy-time" class="doodle-btn btn-buy">25 🪙</button>
+      </div>
+
+      <div class="shop-item">
+        <div>
+          <strong>✦ Escudo Doodle</strong>
+          <p>Evita perder 1 vida en el próximo fallo.</p>
+        </div>
+        <button id="buy-shield" class="doodle-btn btn-buy">40 🪙</button>
+      </div>
+
+      <div class="shop-item">
+        <div>
+          <strong>🔥 Restaurar Racha</strong>
+          <p>Recupera tu último combo de racha máximo.</p>
+        </div>
+        <button id="buy-combo" class="doodle-btn btn-buy">50 🪙</button>
+      </div>
+    </div>
+
+    <button id="shop-close-btn" class="main-black-btn" style="margin-top:15px;">CERRAR TIENDA</button>
+  </div>
+</div>
+
+    <!-- MODAL DESBLOQUEO DE LETRA -->
+    <div id="unlock-modal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <p class="modal-badge">✦ ¡NUEVA LETRA DESCUBIERTA! ✦</p>
+        <div class="modal-symbol" id="unlock-symbol">L</div>
+        <h3 id="unlock-title">Letra L</h3>
+        <p id="unlock-desc">Levanta el dedo índice y el pulgar formando una 'L'.</p>
+        <p id="unlock-motion" class="detail-motion">⤾ Movimiento: Mantener mano firme</p>
+        <button id="unlock-close-btn" class="main-black-btn">✦ ENTENDIDO Y CONTINUAR ✦</button>
+      </div>
+    </div>
+
+    <!-- MODAL GAME OVER -->
+    <div id="gameover-modal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <p class="modal-badge" style="background:#8b0000; color:#fff;">💀 ¡GAME OVER! 💀</p>
+        <div class="modal-symbol" style="font-size: 2.2rem;">💔</div>
+        <h3>Te has quedado sin vidas</h3>
+        <p>Llegaste hasta el <strong>Escenario <span id="gameover-stage">1</span></strong> con un total de <strong><span id="gameover-exp">0</span> EXP</strong>.</p>
+        <button id="gameover-restart-btn" class="main-black-btn" style="margin-top: 10px;">🔄 REINICIAR Y INTENTAR DE NUEVO</button>
+      </div>
+    </div>
+
+    <!-- FOOTER MÓVIL -->
+    <footer class="bottom-nav hidden" id="game-footer">
+      <button id="nav-game" class="nav-btn active">⚔</button>
+      <button id="nav-learn" class="nav-btn">📖</button>
+      <button id="nav-mini" class="nav-btn">⚡</button>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
